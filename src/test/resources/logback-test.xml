@@ -1,0 +1,18 @@
+<configuration>
+
+  <appender class="ch.qos.logback.core.ConsoleAppender" name="CONSOLE">
+    <encoder>
+      <Pattern>${CONSOLE_LOG_FORMAT}</Pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+  </appender>
+
+  <property name="CONSOLE_LOG_FORMAT" scope="context" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] %magenta([%thread]) %highlight([%level]) [%logger{36}.%M:%L] [%X] - %msg%n"/>
+
+  <root level="error">
+    <appender-ref ref="CONSOLE"/>
+  </root>
+
+  <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
+
+</configuration>

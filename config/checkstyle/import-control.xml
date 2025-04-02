@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE import-control PUBLIC
+    "-//Checkstyle//DTD ImportControl Configuration 1.4//EN"
+    "https://checkstyle.org/dtds/import_control_1_4.dtd">
+
+<!--
+  disallow에 해당하는 패키지.클래스를 제한합니다.
+  그 외 에는 허용
+ -->
+<import-control pkg="com.nhn" strategyOnMismatch="allowed">
+  <disallow pkg="org.apache.commons.lang"/>
+  <disallow pkg="com.mysema.commons.lang"/>
+</import-control>
