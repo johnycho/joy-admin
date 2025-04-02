@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+  <meta charset="UTF-8">
+  <title>에러</title>
+  <th:block th:insert="~{fragments/import}"/>
+  <style>
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+<th:block th:insert="~{fragments/heading}"/>
+<h1>에러가 발생했습니다</h1>
+<div class="error" th:text="${message}"></div>
+</body>
+</html>

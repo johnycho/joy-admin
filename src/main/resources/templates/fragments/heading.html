@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark" style="margin-left: -1em; margin-right: -1em; margin-bottom: 1em; padding-left: 1em; padding-right: 1em;">
+  <a class="navbar-brand" href="/"><img src="/img/logo.png" alt="Logo" style="width: 4em;"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="https://bootstrapthemes.co" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          민팅 관리
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li><a class="dropdown-item dropdown-toggle" href="#">이벤트 관리</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/minting/event/register">이벤트 등록</a></li>
+              <li><a class="dropdown-item" href="/minting/event/list">이벤트 리스트</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <span class="navbar-text white-text" sec:authorize="isAuthenticated()">
+            Hello, <span sec:authentication="principal.username"></span>😎
+          </span>
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="/auth/logout">로그아웃</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+</html>

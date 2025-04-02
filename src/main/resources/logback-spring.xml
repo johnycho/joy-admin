@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+
+  <appender class="ch.qos.logback.core.ConsoleAppender" name="CONSOLE">
+    <encoder>
+      <Pattern>${CONSOLE_LOG_FORMAT}</Pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+  </appender>
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="FILE_ERROR">
+    <encoder>
+      <Pattern>${FILE_LOG_FORMAT}</Pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>ERROR</level>
+      <onMatch>ACCEPT</onMatch>
+      <onMismatch>DENY</onMismatch>
+    </filter>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_ROOT}/${APPLICATION_NAME}.${HOSTNAME}.%d{yyyyMMdd}.error.log
+      </fileNamePattern>
+      <maxHistory>${MAX_HISTORY}</maxHistory>
+    </rollingPolicy>
+  </appender>
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="FILE_WARN">
+    <encoder>
+      <Pattern>${FILE_LOG_FORMAT}</Pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>WARN</level>
+      <onMatch>ACCEPT</onMatch>
+      <onMismatch>DENY</onMismatch>
+    </filter>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_ROOT}/${APPLICATION_NAME}.${HOSTNAME}.%d{yyyyMMdd}.warn.log
+      </fileNamePattern>
+      <maxHistory>${MAX_HISTORY}</maxHistory>
+    </rollingPolicy>
+  </appender>
+
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="FILE_INFO">
+    <encoder>
+      <Pattern>${FILE_LOG_FORMAT}</Pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>INFO</level>
+      <onMatch>ACCEPT</onMatch>
+      <onMismatch>DENY</onMismatch>
+    </filter>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_ROOT}/${APPLICATION_NAME}.${HOSTNAME}.%d{yyyyMMdd}.info.log
+      </fileNamePattern>
+      <maxHistory>${MAX_HISTORY}</maxHistory>
+    </rollingPolicy>
+  </appender>
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="FILE_DEBUG">
+    <encoder>
+      <Pattern>${FILE_LOG_FORMAT}</Pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>DEBUG</level>
+      <onMatch>ACCEPT</onMatch>
+      <onMismatch>DENY</onMismatch>
+    </filter>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_ROOT}/${APPLICATION_NAME}.${HOSTNAME}.%d{yyyyMMdd}.debug.log
+      </fileNamePattern>
+      <maxHistory>${MAX_HISTORY}</maxHistory>
+    </rollingPolicy>
+  </appender>
+
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="FILE_TRACE">
+    <encoder>
+      <Pattern>${FILE_LOG_FORMAT}</Pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>TRACE</level>
+      <onMatch>ACCEPT</onMatch>
+      <onMismatch>DENY</onMismatch>
+    </filter>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_ROOT}/${APPLICATION_NAME}.${HOSTNAME}.%d{yyyyMMdd}.trace.log
+      </fileNamePattern>
+      <maxHistory>${MAX_HISTORY}</maxHistory>
+    </rollingPolicy>
+  </appender>
+
+  <!-- console appender -->
+  <property name="CONSOLE_LOG_FORMAT" scope="context"
+      value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] %magenta([%thread]) %highlight([%level]) [%logger{36}.%M:%L] [%X] %msg%n"/>
+
+
+  <!-- file appender : error -->
+  <property name="FILE_LOG_FORMAT" scope="context"
+      value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] [%level] [%logger{36}.%M:%L] [%X] %msg%n"/>
+
+  <!-- file appender : warn-->
+  <springProfile name="dev | alpha | real">
+    <logger level="WARN" name="org"/>
+    <logger level="WARN" name="com"/>
+    <logger level="DEBUG" name="com.nhn"/>
+    <logger level="INFO" name="net.ttddyy.dsproxy.listener.logging"/>
+    <root level="INFO">
+      <appender-ref ref="FILE_ERROR"/>
+      <appender-ref ref="FILE_WARN"/>
+      <appender-ref ref="FILE_INFO"/>
+      <appender-ref ref="FILE_DEBUG"/>
+      <appender-ref ref="FILE_TRACE"/>
+    </root>
+  </springProfile>
+
+  <!-- file appender : info-->
+  <springProfile name="local | test">
+    <logger level="WARN" name="org"/>
+    <logger level="WARN" name="com"/>
+    <logger level="DEBUG" name="com.nhn"/>
+    <logger level="INFO" name="net.ttddyy.dsproxy.listener.logging"/>
+    <root level="INFO">
+      <appender-ref ref="CONSOLE"/>
+      <appender-ref ref="FILE_ERROR"/>
+      <appender-ref ref="FILE_WARN"/>
+      <appender-ref ref="FILE_INFO"/>
+      <appender-ref ref="FILE_DEBUG"/>
+      <appender-ref ref="FILE_TRACE"/>
+    </root>
+  </springProfile>
+
+  <!-- file appender : debug -->
+  <springProperty name="APPLICATION_NAME" scope="context" source="spring.application.name"/>
+
+  <!-- file appender : trace -->
+  <springProperty defaultValue="/home1/irteam/env/logs/${APPLICATION_NAME}" name="LOG_ROOT"
+      scope="context" source="pebble-web.log-root"/>
+
+
+  <!-- file appender : 날짜 및 용량
+  <appender name="FILE_SIZE" class="정ch.qos.logback.core.rolling.RollingFileAppender">
+      <encoder>
+          <charset>UTF-8</charset>
+          <Pattern>${FILE_LOG_FORMAT}</Pattern>
+      </encoder>
+      <file>${LOG_ROOT}/${APPLICATION_NAME}.${DATE_FORMAT}.log</file>
+      <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+          <fileNamePattern>${LOG_ROOT}/${APPLICATION_NAME}.%d{yyyyMMdd}.%i.log</fileNamePattern>
+          <maxFileSize>500MB</maxFileSize>
+          <maxHistory>${MAX_HISTORY}</maxHistory>
+          <totalSizeCap>500MB</totalSizeCap>
+      </rollingPolicy>
+  </appender>
+  -->
+
+  <springProperty defaultValue="3" name="MAX_HISTORY" scope="context" source="pebble-web.log-max-history"/>
+
+  <timestamp datePattern="yyyyMMdd" key="DATE_FORMAT"/>
+</configuration>

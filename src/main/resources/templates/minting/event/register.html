@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+  <meta charset="UTF-8"/>
+  <title>민팅 이벤트 등록</title>
+  <th:block th:insert="~{fragments/import}"/>
+</head>
+<body>
+<th:block th:insert="~{fragments/heading}"/>
+<div class="row gy-4 g-xl-8">
+  <div class="col-xxl-12">
+    <div class="card">
+      <div class="card-body d-flex flex-column">
+        <h3 class="card-title fw-bolder text-black">민팅 이벤트 등록</h3>
+        <br>
+        <form class="form-horizontal" id="mintingEventForm" method="post" th:object="${mintingEvent}" th:action="@{/minting/event/register}">
+          <div class="form-group">
+            <label class="control-label col-sm-10" for="title">이벤트 타이틀:</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="title" name="title" required/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-10" for="description">이벤트 설명:</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="description" name="description" required/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-10" for="contents">이벤트 내용:</label>
+            <div class="col-sm-10">
+              <textarea class="form-control" rows="5" id="contents" name="contents" required></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-10" for="resource">리소스 URI:</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="resource" name="resource" required/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-10" for="startDate">민팅 시작 일시:</label>
+            <div class="col-sm-10">
+              <span style="color: red"><b>협정 세계시(UTC) 기준</b></span>
+              <input type="datetime-local" class="form-control" id="startDate" name="startDate" th:onchange="|displayKstDateTime('startDate', 'startDateKst')|" required/>
+              <span id="startDateKst" style="color: blue"></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-10" for="endDate">민팅 종료 일시:</label>
+            <div class="col-sm-10">
+              <span style="color: red"><b>협정 세계시(UTC) 기준</b></span>
+              <input type="datetime-local" class="form-control" id="endDate" name="endDate" th:onchange="|displayKstDateTime('endDate', 'endDateKst')|" required/>
+              <span id="endDateKst" style="color: blue"></span>
+            </div>
+          </div>
+          <br>
+          <div class="form-group">
+            <div class="col-sm-offset-1 col-sm-10">
+              <button class="btn btn-primary" th:formId="mintingEventForm" th:onclick="|registerData(this.getAttribute('formId'))|">등록</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
