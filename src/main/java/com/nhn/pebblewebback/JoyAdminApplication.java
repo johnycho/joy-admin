@@ -10,10 +10,10 @@ import org.springframework.web.filter.HiddenHttpMethodFilter;
 @EnableFeignClients
 @EnableJpaAuditing
 @SpringBootApplication(scanBasePackages = "com.nhn.pebblewebback")
-public class PebbleWebBackApplication {
+public class JoyAdminApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(PebbleWebBackApplication.class, args);
+    SpringApplication.run(JoyAdminApplication.class, args);
   }
 
   @Bean
