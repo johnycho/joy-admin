@@ -12,7 +12,7 @@
       <div class="col-xl-4">
         <div class="card">
           <div class="card-body d-flex flex-column">
-            <h3 class="card-title fw-bolder text-black">Pebble Web Admin</h3>
+            <img src="/img/joy-logo-orange.png" alt="Joy Admin 로고" class="mx-auto d-block" style="width: 20em;" />
             <br>
             <form method="post" action="/login/process" autocomplete="off">
               <div class="form-group">
@@ -34,6 +34,14 @@
               <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
               <button type="submit" class="btn btn-primary">로그인</button>
             </form>
+
+            <hr class="my-4">
+
+            <!-- 구글 로그인 버튼 -->
+            <a href="/oauth2/authorization/google" class="btn btn-outline-dark w-100">
+              <img src="https://developers.google.com/identity/images/g-logo.png" style="width:20px; margin-right:10px;" alt="구글 로그인">
+              구글 계정으로 로그인
+            </a>
           </div>
         </div>
       </div>

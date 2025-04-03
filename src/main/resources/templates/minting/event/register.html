@@ -4,8 +4,14 @@
 >
 <head>
   <meta charset="UTF-8"/>
-  <title>민팅 이벤트 등록</title>
+  <title>신규 아동 등록</title>
   <th:block th:insert="~{fragments/import}"/>
+
+  <!-- Toast UI Editor CSS -->
+  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+
+  <!-- Toast UI Editor JS -->
+  <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 </head>
 <body>
 <th:block th:insert="~{fragments/heading}"/>
@@ -13,7 +19,7 @@
   <div class="col-xxl-12">
     <div class="card">
       <div class="card-body d-flex flex-column">
-        <h3 class="card-title fw-bolder text-black">민팅 이벤트 등록</h3>
+        <h3 class="card-title fw-bolder text-black">신규 아동 등록</h3>
         <br>
         <form class="form-horizontal" id="mintingEventForm" method="post" th:object="${mintingEvent}" th:action="@{/minting/event/register}">
           <div class="form-group">
@@ -58,6 +64,14 @@
           </div>
           <br>
           <div class="form-group">
+            <label class="control-label col-sm-10" for="mdcontents">마크다운 내용:</label>
+            <div class="col-sm-10">
+              <div id="toastEditor" style="border:1px solid #ccc;"></div>
+              <input type="hidden" name="mdcontents" id="mdcontents" required/>
+            </div>
+          </div>
+          <br>
+          <div class="form-group">
             <div class="col-sm-offset-1 col-sm-10">
               <button class="btn btn-primary" th:formId="mintingEventForm" th:onclick="|registerData(this.getAttribute('formId'))|">등록</button>
             </div>
@@ -67,5 +81,23 @@
     </div>
   </div>
 </div>
+
+<!-- Toast UI Editor 스크립트 -->
+<script>
+  const editor = new toastui.Editor({
+    el: document.querySelector('#toastEditor'),
+    height: '400px',
+    initialEditType: 'markdown',
+    previewStyle: 'vertical',
+    language: 'ko',
+  });
+
+  function registerData(formId) {
+    const form = document.getElementById(formId);
+    const hiddenInput = document.getElementById('mdcontents');
+    hiddenInput.value = editor.getMarkdown(); // 마크다운 내용 세팅
+    form.submit(); // 폼 제출
+  }
+</script>
 </body>
 </html>
