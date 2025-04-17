@@ -7,7 +7,7 @@
   disallow에 해당하는 패키지.클래스를 제한합니다.
   그 외 에는 허용
  -->
-<import-control pkg="com.nhn" strategyOnMismatch="allowed">
+<import-control pkg="com.joy" strategyOnMismatch="allowed">
   <disallow pkg="org.apache.commons.lang"/>
   <disallow pkg="com.mysema.commons.lang"/>
 </import-control>

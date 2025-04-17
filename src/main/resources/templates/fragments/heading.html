@@ -21,13 +21,13 @@
         </ul>
       </li>
     </ul>
-    <!-- ✅ 일반 로그인 사용자 -->
+    <!-- 일반 로그인 사용자 -->
     <span class="navbar-text white-text"
           sec:authorize="isAuthenticated() and !(#authentication instanceof T(org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken))">
       Hello, <span sec:authentication="principal.username"></span> 😎
     </span>
 
-    <!-- ✅ OAuth2 (Google) 로그인 사용자 -->
+    <!-- OAuth2 (Google) 로그인 사용자 -->
     <span class="navbar-text white-text"
           sec:authorize="isAuthenticated() and (#authentication instanceof T(org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken))">
       Hello, <span sec:authentication="principal.attributes['name']"></span> 😎
