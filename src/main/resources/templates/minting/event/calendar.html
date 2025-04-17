@@ -46,6 +46,12 @@
     </div>
   </div>
 </div>
+
+<!-- dayjs 추가 -->
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/ko.js"></script>
+<script> dayjs.locale('ko'); </script>
+
 <th:block th:insert="~{fragments/detailScheduleModal}"/>
 
 <script sec:authorize="isAuthenticated() and (#authentication instanceof T(org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken))">
@@ -66,7 +72,7 @@
         .then(res => res.json())
         .then(data => {
           allEvents = data;
-          successCallback(filterEvents()); // 필터된 것만 보여줌
+          successCallback(getFilteredEvents()); // 필터된 것만 보여줌
         })
         .catch(err => failureCallback(err));
       },
@@ -74,8 +80,8 @@
         const event = info.event;
 
         document.getElementById('event-title').innerText = event.title || '(제목 없음)';
-        document.getElementById('event-start').innerText = event.startStr;
-        document.getElementById('event-end').innerText = event.endStr || '-';
+        document.getElementById('event-start').innerText = dayjs(event.start).format('YYYY-MM-DD (ddd) HH:mm');
+        document.getElementById('event-end').innerText = dayjs(event.end).format('YYYY-MM-DD (ddd) HH:mm') || '-';
 
         const myModal = new bootstrap.Modal(document.getElementById('detailScheduleModal'));
         myModal.show();
@@ -114,28 +120,36 @@
 
         const checkbox = label.querySelector('input');
         checkbox.addEventListener('change', () => {
-          calendar.removeAllEvents();
-          calendar.addEventSource(filterEvents());
+          calendar.removeAllEventSources();
+          calendar.addEventSource(getFilteredEvents());
         });
       });
     });
 
-    function filterEvents() {
+    document.getElementById('calendarSearch').addEventListener('input', debounce(function (e) {
+      calendar.removeAllEventSources();
+      calendar.addEventSource(getFilteredEvents());
+    }, 300)); // 300ms 기다림
+
+    function getFilteredEvents() {
       const selected = Array.from(document.querySelectorAll('.calendar-filter:checked')).map(cb => cb.value);
-      return allEvents.filter(e => selected.includes(e.calendarId));
+      const keyword = document.getElementById('calendarSearch').value.toLowerCase();
+
+      return allEvents.filter(event =>
+          selected.includes(event.calendarId)
+          && event.title.toLowerCase().includes(keyword)
+      );
     }
 
-    document.getElementById('calendarSearch').addEventListener('input', function (e) {
-      const keyword = e.target.value.toLowerCase();
-
-      // 필터링된 이벤트만 다시 추가
-      const matchedEvents = filterEvents().filter(event =>
-          event.title.toLowerCase().includes(keyword)
-      );
-
-      calendar.removeAllEvents();
-      calendar.addEventSource(matchedEvents);
-    });
+    // 검색 성능 최적화
+    // 사용자가 계속해서 입력하는 중엔 함수 실행을 미루고, 입력이 멈춘 후 일정 시간(예: 300ms)이 지나면 실행
+    function debounce(func, delay) {
+      let timeout;
+      return function (...args) {
+        clearTimeout(timeout); // 이전에 설정된 함수 실행 예약을 취소
+        timeout = setTimeout(() => func.apply(this, args), delay); // 일정 시간 후에 함수 실행 예약
+      };
+    }
 
     // 연도 드롭다운 세팅
     const yearSelect = document.getElementById('yearSelect');
