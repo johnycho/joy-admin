@@ -22,10 +22,11 @@ public class CsvConvertService {
   }
 
   public List<String> convertToSubjects(final MultipartFile file) throws IOException {
-    return new CSVParser(new InputStreamReader(file.getInputStream()), CSVFormat.DEFAULT.builder()
-                                                                                        .setHeader()
-                                                                                        .setSkipHeaderRecord(true)
-                                                                                        .build())
+    return new CSVParser(new InputStreamReader(file.getInputStream()),
+                         CSVFormat.DEFAULT.builder()
+                                          .setHeader()
+                                          .setSkipHeaderRecord(true)
+                                          .build())
         .stream()
         .distinct()
         .map(CsvConvertService::fetchFirstDataAtRow)

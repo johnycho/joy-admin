@@ -6,10 +6,10 @@ import lombok.experimental.UtilityClass;
 public class Category {
 
   public enum Service {
-    PEBBLE, ETC
+    JOY, ETC
   }
 
   public enum Feature {
-    PEBBLE, ETC
+    JOY, ETC
   }
 }
