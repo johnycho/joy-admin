@@ -1,4 +1,4 @@
-package com.joy.web.calendar.presentation.controller.mvc;
+package com.joy.web.calendar.presentation.controller;
 
 import com.joy.web.calendar.application.dto.CalendarEventResponse;
 import com.joy.web.calendar.application.dto.CalendarTypeResponse;

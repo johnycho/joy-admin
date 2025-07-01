@@ -1,4 +1,4 @@
-package com.joy.web.calendar.presentation.controller.rest;
+package com.joy.web.calendar.presentation.controller;
 
 import com.joy.config.HealthMonitor;
 import io.swagger.v3.oas.annotations.Operation;
