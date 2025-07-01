@@ -1,0 +1,130 @@
+version: '3.8'
+services:
+
+  # mysqldb
+  mysql-master:
+    container_name: mysql-master
+    image: arm64v8/mysql:8.0.31
+    ports:
+      - "23306:3306"
+    restart: always
+    environment:
+      TZ: UTC
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+    volumes:
+      - ./mysql/data/master:/var/lib/mysql --user 1000
+      - ./mysql/m_conf/:/etc/mysql/conf.d
+
+
+  mysql-replica:
+    container_name: mysql-replica
+    image: arm64v8/mysql:8.0.31
+    depends_on:
+      - mysql-master
+    ports:
+      - "33306:3306"
+    restart: always
+    environment:
+      TZ: UTC
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+    volumes:
+      - ./mysql/data/replica:/var/lib/mysql --user 1000
+      - ./mysql/r_conf/:/etc/mysql/conf.d
+
+  # redis
+  redis-node-1:
+    image: redis:7.0.4-alpine
+    container_name: redis-node-1
+    network_mode: host
+    restart: always
+    command: redis-server /usr/local/etc/redis/redis.conf --port 6379
+    volumes:
+      - ./redis/config/node-1:/usr/local/etc/redis
+      - ./redis/data/node-1:/data --user 1000
+
+  redis-node-2:
+    image: redis:7.0.4-alpine
+    container_name: redis-node-2
+    network_mode: host
+    restart: always
+    command: redis-server /usr/local/etc/redis/redis.conf --port 6380
+    volumes:
+      - ./redis/config/node-2:/usr/local/etc/redis
+      - ./redis/data/node-2:/data --user 1000
+
+  redis-node-3:
+    image: redis:7.0.4-alpine
+    container_name: redis-node-3
+    network_mode: host
+    restart: always
+    command: redis-server /usr/local/etc/redis/redis.conf --port 6381
+    volumes:
+      - ./redis/config/node-3:/usr/local/etc/redis
+      - ./redis/data/node-3:/data --user 1000
+  # rabbitmq 
+  rabbitmq:
+    image: rabbitmq:3.11-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "RabbitMQ-My-Cookies"
+      RABBITMQ_DEFAULT_USER: "admin"
+      RABBITMQ_DEFAULT_PASS: "admin"
+
+
+  # kafka
+  zookeeper:
+    container_name: kafka-zookeeper
+    platform: linux/amd64
+    image: confluentinc/cp-zookeeper:latest
+    networks: 
+      - broker-kafka
+    restart: always
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+  kafka:
+    container_name: kafka
+    image: confluentinc/cp-kafka:latest.arm64
+    networks: 
+      - broker-kafka
+    depends_on:
+      - zookeeper
+    restart: always
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: true
+  kafdrop:
+    container_name: kafdrop
+    image: dmytronasyrov/kafdrop:latest
+    networks: 
+      - broker-kafka
+    depends_on:
+      - kafka
+    restart: always
+    ports:
+      - 9000:9000
+    environment:
+      KAFKA_BROKERCONNECT: kafka:29092
+
+networks: 
+  broker-kafka:
+    driver: bridge

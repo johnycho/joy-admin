@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -26,7 +27,9 @@ public class CalendarController {
   }
 
   @GetMapping("/schedules")
-  public ResponseEntity<List<CalendarEventResponse>> findSchedules(OAuth2AuthenticationToken authentication) {
-    return ResponseEntity.ok(calendarService.findSchedules(authentication));
+  public ResponseEntity<List<CalendarEventResponse>> findSchedules(OAuth2AuthenticationToken authentication,
+                                                                   @RequestParam String start,
+                                                                   @RequestParam String end) {
+    return ResponseEntity.ok(calendarService.findSchedules(authentication, start, end));
   }
 }

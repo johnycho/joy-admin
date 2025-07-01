@@ -26,27 +26,27 @@
   </style>
 
   <!-- FullCalendar -->
-  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.css" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.js"></script>
 </head>
 <body>
 <th:block th:insert="~{fragments/heading}"/>
 <div class="imageDiv">
-  <img class="imageClass" src="/img/NHN-logo.png" alt="NHN"/>
+  <img alt="NHN" class="imageClass" src="/img/NHN-logo.png"/>
 </div>
 <div class="row gy-4 g-xl-8">
   <div class="col-xxl-4">
     <div class="card">
       <div class="card-body d-flex flex-column">
-        <h3 class="card-title fw-bolder text-black">아동 등록</h3>
-        <button type="button" class="btn btn-danger" onclick="location.href='/minting/event/register'">+ 신규 아동</button>
+        <h3 class="card-title fw-bolder text-black">학생 등록</h3>
+        <button class="btn btn-danger" onclick="location.href='/student/register'" type="button">+ 신규 학생</button>
       </div>
     </div>
   </div>
 </div>
 <br>
-<th:block th:insert="~{minting/event/calendar}"/>
+<th:block th:insert="~{schedule/calendar}"/>
 <br>
-<th:block th:insert="~{minting/event/dataTable}"/>
+<th:block th:insert="~{student/dataTable}"/>
 </body>
 </html>

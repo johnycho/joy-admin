@@ -1,0 +1,185 @@
+<html lang="ko" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div class="row gy-4 g-xl-8">
+  <div class="col-xxl-12">
+    <div class="card">
+      <div class="card-body d-flex flex-column">
+        <h3 class="card-title fw-bolder text-black">캘린더</h3>
+        <!-- 구글 로그인 버튼 -->
+        <div class="row justify-content-center mt-3"
+             sec:authorize="isAuthenticated() and !(#authentication instanceof T(org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken))">
+          <div class="col-md-2">
+            <a href="/oauth2/authorization/google" class="btn btn-outline-dark w-100">
+              <img src="https://developers.google.com/identity/images/g-logo.png" style="width:20px; margin-right:10px;" alt="구글 로그인">
+              구글 계정으로 로그인
+            </a>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-start align-items-center gap-2 mt-3 mb-3"
+             sec:authorize="isAuthenticated() and (#authentication instanceof T(org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken))">
+          <select id="yearSelect" class="form-select w-auto"></select>
+          <select id="monthSelect" class="form-select w-auto">
+            <option value="0">1월</option>
+            <option value="1">2월</option>
+            <option value="2">3월</option>
+            <option value="3">4월</option>
+            <option value="4">5월</option>
+            <option value="5">6월</option>
+            <option value="6">7월</option>
+            <option value="7">8월</option>
+            <option value="8">9월</option>
+            <option value="9">10월</option>
+            <option value="10">11월</option>
+            <option value="11">12월</option>
+          </select>
+          <button id="goButton" class="btn btn-primary">이동</button>
+        </div>
+
+        <!-- 달력 필터 -->
+        <div class="d-flex justify-content-start align-items-center gap-2 mb-3" id="calendar-filters"></div>
+
+        <div class="mb-3">
+          <input type="text" id="calendarSearch" class="form-control" placeholder="검색할 일정의 제목을 입력하세요."/>
+        </div>
+
+        <!-- 달력 -->
+        <div id="calendar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- dayjs 추가 -->
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/ko.js"></script>
+<script> dayjs.locale('ko'); </script>
+
+<th:block th:insert="~{fragments/detailScheduleModal}"/>
+
+<script sec:authorize="isAuthenticated() and (#authentication instanceof T(org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken))">
+  let allEvents = []; // 서버에서 가져온 전체 이벤트 저장
+  let calendar;
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const calendarEl = document.getElementById('calendar');
+
+    calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      locale: 'ko',
+      selectable: true,
+      editable: true,
+      nowIndicator: true,
+      events: function (fetchInfo, successCallback, failureCallback) {
+        fetch(`/api/calendar/schedules?start=${fetchInfo.startStr}&end=${fetchInfo.endStr}`)
+        .then(res => res.json())
+        .then(data => {
+          allEvents = data;
+          successCallback(getFilteredEvents()); // 필터 적용
+        })
+        .catch(err => failureCallback(err));
+      },
+      eventClick: function (info) {
+        const event = info.event;
+
+        document.getElementById('event-title').innerText = event.title || '(제목 없음)';
+        document.getElementById('event-start').innerText = dayjs(event.start).format('YYYY-MM-DD (ddd) HH:mm');
+        document.getElementById('event-end').innerText = dayjs(event.end).format('YYYY-MM-DD (ddd) HH:mm') || '-';
+
+        const myModal = new bootstrap.Modal(document.getElementById('detailScheduleModal'));
+        myModal.show();
+      },
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+      },
+      buttonText: {
+        today: '오늘',
+        month: '월',
+        week: '주',
+        day: '일',
+        list: '목록',
+      },
+      datesSet: function () {
+        // 날짜 셀 스타일링
+        document.querySelectorAll('.fc-day-sun').forEach(el => {
+          el.style.color = 'red';
+        });
+        document.querySelectorAll('.fc-day-sat').forEach(el => {
+          el.style.color = 'blue';
+        });
+      }
+    });
+
+    fetch('/api/calendar/types')
+    .then(res => res.json())
+    .then(calendars => {
+      const filterContainer = document.getElementById('calendar-filters');
+      calendars.forEach(cal => {
+        const label = document.createElement('label');
+        label.innerHTML = `<input type="checkbox" class="calendar-filter" value="${cal.id}" checked> ${cal.title}`;
+        filterContainer.appendChild(label);
+
+        const checkbox = label.querySelector('input');
+        checkbox.addEventListener('change', () => {
+          calendar.removeAllEventSources();
+          calendar.addEventSource(getFilteredEvents());
+        });
+      });
+    });
+
+    document.getElementById('calendarSearch').addEventListener('input', debounce(function (e) {
+      calendar.removeAllEventSources();
+      calendar.addEventSource(getFilteredEvents());
+    }, 300)); // 300ms 기다림
+
+    function getFilteredEvents() {
+      const selected = Array.from(document.querySelectorAll('.calendar-filter:checked')).map(cb => cb.value);
+      const keyword = document.getElementById('calendarSearch').value.toLowerCase();
+
+      return allEvents.filter(event =>
+          selected.includes(event.calendarId)
+          && event.title.toLowerCase().includes(keyword)
+      );
+    }
+
+    // 검색 성능 최적화
+    // 사용자가 계속해서 입력하는 중엔 함수 실행을 미루고, 입력이 멈춘 후 일정 시간(예: 300ms)이 지나면 실행
+    function debounce(func, delay) {
+      let timeout;
+      return function (...args) {
+        clearTimeout(timeout); // 이전에 설정된 함수 실행 예약을 취소
+        timeout = setTimeout(() => func.apply(this, args), delay); // 일정 시간 후에 함수 실행 예약
+      };
+    }
+
+    // 연도 드롭 다운 세팅
+    const yearSelect = document.getElementById('yearSelect');
+    const currentYear = new Date().getFullYear();
+    for (let y = currentYear - 10; y <= currentYear + 10; y++) {
+      const opt = document.createElement('option');
+      opt.value = y;
+      opt.text = y + '년';
+      // 연도 드롭 다운 기본 선택
+      if (y === currentYear) {
+        opt.selected = true;
+      }
+      yearSelect.appendChild(opt);
+    }
+
+    // 월 드롭 다운 기본 선택
+    const monthSelect = document.getElementById('monthSelect');
+    const currentMonth = new Date().getMonth(); // 0 ~ 11
+    monthSelect.value = currentMonth.toString();
+
+    // 이동 버튼 클릭 시 해당 월/연도로 이동
+    document.getElementById('goButton').addEventListener('click', function () {
+      const year = parseInt(yearSelect.value);
+      const month = parseInt(document.getElementById('monthSelect').value);
+      const date = new Date(year, month, 1);
+      calendar.gotoDate(date);
+    });
+
+    calendar.render();
+  });
+</script>

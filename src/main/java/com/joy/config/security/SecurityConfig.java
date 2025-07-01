@@ -31,24 +31,29 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(final HttpSecurity http, final Customizer<CorsConfigurer<HttpSecurity>> corsCustomizer) throws Exception {
-    return http.authorizeHttpRequests(configurer -> configurer.requestMatchers("/", "/home", "/minting/**").hasAnyAuthority("ROLE_ADMIN", "OIDC_USER")
-            .anyRequest().permitAll())
-        .formLogin(configurer -> configurer.loginPage("/auth/login")
-            .loginProcessingUrl("/login/process")
-            .usernameParameter("userId")
-            .passwordParameter("userPassword")
-            .successHandler(new CustomLoginSuccessHandler())
-            .failureHandler(new CustomLoginFailureHandler())
-        )
-        .oauth2Login(oauth -> oauth.defaultSuccessUrl("/", true))
-        .logout(configurer -> configurer.logoutUrl("/auth/logout")
-            .logoutSuccessUrl("/auth/login")
-            .invalidateHttpSession(true)
-            .deleteCookies("SESSION"))
-        .exceptionHandling(configurer -> configurer.accessDeniedPage("/error/error"))
-        .csrf(configurer -> configurer.ignoringRequestMatchers("/api/**"))
-        .cors(corsCustomizer)
-        .build();
+    return http.authorizeHttpRequests(configurer ->
+                                          configurer.requestMatchers("/", "/home", "/student/**")
+                                                    .hasAnyAuthority("ROLE_ADMIN", "OIDC_USER")
+                                                    .requestMatchers("/api/**")
+                                                    .authenticated()
+                                                    .anyRequest()
+                                                    .permitAll())
+               .formLogin(configurer -> configurer.loginPage("/auth/login")
+                                                  .loginProcessingUrl("/login/process")
+                                                  .usernameParameter("userId")
+                                                  .passwordParameter("userPassword")
+                                                  .successHandler(new CustomLoginSuccessHandler())
+                                                  .failureHandler(new CustomLoginFailureHandler())
+               )
+               .oauth2Login(oauth -> oauth.defaultSuccessUrl("/", true))
+               .logout(configurer -> configurer.logoutUrl("/auth/logout")
+                                               .logoutSuccessUrl("/auth/login")
+                                               .invalidateHttpSession(true)
+                                               .deleteCookies("SESSION"))
+               .exceptionHandling(configurer -> configurer.accessDeniedPage("/error/error"))
+               .csrf(configurer -> configurer.ignoringRequestMatchers("/api/**"))
+               .cors(corsCustomizer)
+               .build();
   }
 
   @Bean

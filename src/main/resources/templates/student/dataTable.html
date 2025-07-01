@@ -1,0 +1,46 @@
+<div class="row gy-4 g-xl-8">
+  <div class="col-xxl-12">
+    <div class="card">
+      <div class="card-body d-flex flex-column">
+        <h3 class="card-title fw-bolder text-black">학생 리스트</h3>
+        <br>
+        <div class="table-responsive col-sm-12">
+          <table class="table table-bordered table-striped" data-order='[[0, "desc"]]' id="studentDataTable">
+            <thead>
+            <tr>
+              <th>No</th>
+              <th>UUID</th>
+              <th>이름</th>
+              <th>설명</th>
+              <th>특이 사항</th>
+              <th>치료 기간</th>
+              <th>삭제</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="student : ${students}">
+              <td th:text="${studentStat.index + 1}"></td>
+              <td th:text="${student.uuid()}"></td>
+              <td th:text="${student.name()}"></td>
+              <td th:text="${student.description()}"></td>
+              <td style="white-space: pre-line;" th:text="${student.contents()}"></td>
+              <td th:utext="|${student.utcStartDate() + ' ~ ' + student.utcEndDate() + ' (UTC)<br/>→ ' + student.kstStartDate() + ' ~ ' + student.kstEndDate() + ' (KST)'}|"></td>
+              <td>
+                <button class="btn" style="padding: 0" th:onclick="|deleteData('student', this.getAttribute('studentUuid'))|" th:studentUuid="${student.uuid()}">
+                  <i class="fa fa-trash-o" style="color:red"></i>
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<th:block th:insert="~{fragments/deletionModal}"/>
+<form id="studentDeletionForm" th:action="@{/templates/student}" th:method="post">
+  <input name="_method" type="hidden" value="DELETE">
+  <input id="type" name="type" type="hidden">
+  <input id="uuid" name="uuid" type="hidden">
+</form>

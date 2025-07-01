@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+  <meta charset="UTF-8"/>
+  <title>신규 아동 등록</title>
+  <th:block th:insert="~{fragments/import}"/>
+
+  <!-- Toast UI Editor CSS -->
+  <link href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" rel="stylesheet"/>
+
+  <!-- Toast UI Editor JS -->
+  <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+</head>
+<body>
+<th:block th:insert="~{fragments/heading}"/>
+<div class="row gy-4 g-xl-8">
+  <div class="col-xxl-12">
+    <div class="card">
+      <div class="card-body d-flex flex-column">
+        <h3 class="card-title fw-bolder text-black">신규 학생 등록</h3>
+        <br>
+        <form class="form-horizontal" id="studentForm" method="post" th:action="@{/student/register}" th:object="${student}">
+          <div class="form-group">
+            <label class="control-label col-sm-10" for="name">이름:</label>
+            <div class="col-sm-10">
+              <input class="form-control" id="name" name="name" required type="text"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-10" for="description">설명:</label>
+            <div class="col-sm-10">
+              <input class="form-control" id="description" name="description" required type="text"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-10" for="contents">특이 사항:</label>
+            <div class="col-sm-10">
+              <textarea class="form-control" id="contents" name="contents" required rows="5"></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-10" for="startDate">치료 시작 일시:</label>
+            <div class="col-sm-10">
+              <span style="color: red"><b>협정 세계시(UTC) 기준</b></span>
+              <input class="form-control" id="startDate" name="startDate" required th:onchange="|displayKstDateTime('startDate', 'startDateKst')|" type="datetime-local"/>
+              <span id="startDateKst" style="color: blue"></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-10" for="endDate">치료 종결 일시:</label>
+            <div class="col-sm-10">
+              <span style="color: red"><b>협정 세계시(UTC) 기준</b></span>
+              <input class="form-control" id="endDate" name="endDate" required th:onchange="|displayKstDateTime('endDate', 'endDateKst')|" type="datetime-local"/>
+              <span id="endDateKst" style="color: blue"></span>
+            </div>
+          </div>
+          <br>
+          <div class="form-group">
+            <label class="control-label col-sm-10" for="mdcontents">마크다운 내용:</label>
+            <div class="col-sm-10">
+              <div id="toastEditor" style="border:1px solid #ccc;"></div>
+              <input id="mdcontents" name="mdcontents" required type="hidden"/>
+            </div>
+          </div>
+          <br>
+          <div class="form-group">
+            <div class="col-sm-offset-1 col-sm-10">
+              <button class="btn btn-primary" th:formId="studentForm" th:onclick="|registerData(this.getAttribute('formId'))|">등록</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast UI Editor 스크립트 -->
+<script>
+  const editor = new toastui.Editor({
+    el: document.querySelector('#toastEditor'),
+    height: '400px',
+    initialEditType: 'markdown',
+    previewStyle: 'vertical',
+    language: 'ko',
+  });
+
+  function registerData(formId) {
+    const form = document.getElementById(formId);
+    const hiddenInput = document.getElementById('mdcontents');
+    hiddenInput.value = editor.getMarkdown(); // 마크다운 내용 세팅
+    form.submit(); // 폼 제출
+  }
+</script>
+</body>
+</html>
