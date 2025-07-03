@@ -10,7 +10,6 @@ import static com.joy.config.exception.util.CustomExceptionBuildUtil.buildNotRea
 import com.joy.config.exception.vo.CustomException;
 import com.joy.config.security.filter.ContentLoggingFilter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.actuate.endpoint.web.annotation.RestControllerEndpoint;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -23,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @Slf4j
-@ControllerAdvice(annotations = { RestController.class, RestControllerEndpoint.class })
+@ControllerAdvice(annotations = { RestController.class })
 @Order(1)
 public class RestExceptionHandler {
 
