@@ -135,7 +135,7 @@
   <springProperty name="APPLICATION_NAME" scope="context" source="spring.application.name"/>
 
   <!-- file appender : trace -->
-  <springProperty defaultValue="/home/ubuntu/apps/${APPLICATION_NAME}/logs" name="LOG_ROOT"
+  <springProperty defaultValue="/home/joy/apps/${APPLICATION_NAME}/logs" name="LOG_ROOT"
       scope="context" source="joy-admin.log-root"/>
 
 
