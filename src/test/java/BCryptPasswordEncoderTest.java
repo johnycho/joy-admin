@@ -7,7 +7,7 @@ class BCryptPasswordEncoderTest {
   @Test
   void encode_and_matches_test() {
     // given
-    String rawPassword = "joy250321!@#";
+    String rawPassword = "joy250321~!";
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     // when

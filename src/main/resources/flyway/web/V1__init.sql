@@ -13,8 +13,8 @@ CREATE TABLE authorities
 CREATE UNIQUE INDEX ix_auth_username ON authorities (username, authority);
 
 INSERT IGNORE INTO users
-VALUES ('admin', '$2a$10$9RcW/omM9nMfFTRSTZGH6ujl7kk.nXwp4OlD73gM2JtfGeW8HlZBq', '1');
-#password: 'joy250321!@#'
+VALUES ('admin', '$2a$10$PQ3i4qzBLP5CGEJvSTm77O738c35DEG80XXti6HGTFQsF2eFbb4oG', '1');
+#password: 'joy250321~!'
 INSERT IGNORE INTO authorities
 VALUES ('admin', 'ROLE_ADMIN');
 
