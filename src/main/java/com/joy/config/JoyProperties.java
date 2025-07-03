@@ -6,12 +6,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * Pebble Web Properties.
- */
 @Data
 @Configuration
-@ConfigurationProperties("pebble-web")
+@ConfigurationProperties("joy-admin")
 public class JoyProperties {
   private Cors cors = new Cors();
   private String logRoot = StringUtils.EMPTY;

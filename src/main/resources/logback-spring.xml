@@ -135,8 +135,8 @@
   <springProperty name="APPLICATION_NAME" scope="context" source="spring.application.name"/>
 
   <!-- file appender : trace -->
-  <springProperty defaultValue="/home1/irteam/env/logs/${APPLICATION_NAME}" name="LOG_ROOT"
-      scope="context" source="pebble-web.log-root"/>
+  <springProperty defaultValue="/home/ubuntu/logs/${APPLICATION_NAME}" name="LOG_ROOT"
+      scope="context" source="joy-admin.log-root"/>
 
 
   <!-- file appender : 날짜 및 용량
@@ -155,7 +155,7 @@
   </appender>
   -->
 
-  <springProperty defaultValue="3" name="MAX_HISTORY" scope="context" source="pebble-web.log-max-history"/>
+  <springProperty defaultValue="3" name="MAX_HISTORY" scope="context" source="joy-admin.log-max-history"/>
 
   <timestamp datePattern="yyyyMMdd" key="DATE_FORMAT"/>
 </configuration>

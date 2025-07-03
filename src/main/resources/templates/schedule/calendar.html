@@ -8,8 +8,8 @@
         <div class="row justify-content-center mt-3"
              sec:authorize="isAuthenticated() and !(#authentication instanceof T(org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken))">
           <div class="col-md-2">
-            <a href="/oauth2/authorization/google" class="btn btn-outline-dark w-100">
-              <img src="https://developers.google.com/identity/images/g-logo.png" style="width:20px; margin-right:10px;" alt="구글 로그인">
+            <a class="btn btn-outline-dark w-100" href="/oauth2/authorization/google">
+              <img alt="구글 로그인" src="https://developers.google.com/identity/images/g-logo.png" style="width:20px; margin-right:10px;">
               구글 계정으로 로그인
             </a>
           </div>
@@ -17,8 +17,8 @@
 
         <div class="d-flex justify-content-start align-items-center gap-2 mt-3 mb-3"
              sec:authorize="isAuthenticated() and (#authentication instanceof T(org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken))">
-          <select id="yearSelect" class="form-select w-auto"></select>
-          <select id="monthSelect" class="form-select w-auto">
+          <select class="form-select w-auto" id="yearSelect"></select>
+          <select class="form-select w-auto" id="monthSelect">
             <option value="0">1월</option>
             <option value="1">2월</option>
             <option value="2">3월</option>
@@ -32,14 +32,14 @@
             <option value="10">11월</option>
             <option value="11">12월</option>
           </select>
-          <button id="goButton" class="btn btn-primary">이동</button>
+          <button class="btn btn-primary" id="goButton">이동</button>
         </div>
 
         <!-- 달력 필터 -->
         <div class="d-flex justify-content-start align-items-center gap-2 mb-3" id="calendar-filters"></div>
 
         <div class="mb-3">
-          <input type="text" id="calendarSearch" class="form-control" placeholder="검색할 일정의 제목을 입력하세요."/>
+          <input class="form-control" id="calendarSearch" placeholder="검색할 일정의 제목을 입력하세요." type="text"/>
         </div>
 
         <!-- 달력 -->
@@ -71,7 +71,13 @@
       nowIndicator: true,
       events: function (fetchInfo, successCallback, failureCallback) {
         fetch(`/api/calendar/schedules?start=${fetchInfo.startStr}&end=${fetchInfo.endStr}`)
-        .then(res => res.json())
+        .then(res => {
+          if (res.status === 401 || res.redirected) {
+            window.location.href = '/auth/login';
+            return Promise.reject('Unauthorized');
+          }
+          return res.json();
+        })
         .then(data => {
           allEvents = data;
           successCallback(getFilteredEvents()); // 필터 적용

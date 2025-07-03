@@ -40,8 +40,8 @@ public class JoyWebDbConfig {
   public DataSource joyWebDataSource() {
     return new LazyConnectionDataSourceProxy(
         DataSourceLoggingUtils.apply(new JoyDataSource()
-                                         .master(DataSourceBindUtils.bind(env, "spring.datasource.hikari.pebble-web-master"))
-                                         .replica(DataSourceBindUtils.bind(env, "spring.datasource.hikari.pebble-web-replica"))
+                                         .master(DataSourceBindUtils.bind(env, "spring.datasource.hikari.joy-admin-master"))
+                                         .replica(DataSourceBindUtils.bind(env, "spring.datasource.hikari.joy-admin-replica"))
                                          .createRoutingDataSource())
     );
   }
