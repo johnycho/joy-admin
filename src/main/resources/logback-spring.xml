@@ -140,7 +140,7 @@
 
 
   <!-- file appender : 날짜 및 용량
-  <appender name="FILE_SIZE" class="정ch.qos.logback.core.rolling.RollingFileAppender">
+  <appender name="FILE_SIZE" class="ch.qos.logback.core.rolling.RollingFileAppender">
       <encoder>
           <charset>UTF-8</charset>
           <Pattern>${FILE_LOG_FORMAT}</Pattern>
