@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
@@ -27,7 +26,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @Component
 public class EndpointExceptionHandler {
 
-  @Around("within(com.joy.web.calendar.presentation.controller.rest..*)")
+  @Around("within(com.joy.web.calendar.presentation.controller..*)")
   public Object handleEndpointException(final ProceedingJoinPoint pjp) {
     final Object result;
     try {
@@ -38,7 +37,6 @@ public class EndpointExceptionHandler {
     return result;
   }
 
-  @NotNull
   private ResponseEntity<ExceptionResponse> handleException(final Throwable t) {
     if (t instanceof CustomException e) {
       return handleCustomException(e);

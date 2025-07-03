@@ -5,7 +5,6 @@ import com.joy.web.student.domain.entity.Student;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import org.jetbrains.annotations.Nullable;
 
 public class StudentDto {
 
@@ -41,7 +40,6 @@ public class StudentDto {
                                     convertToKst(student.getEndDate()));
     }
 
-    @Nullable
     private static LocalDateTime convertToKst(final LocalDateTime dateTime) {
       return Optional.ofNullable(dateTime).map(DateTimeUtils::convertToKstDateTime).orElse(null);
     }

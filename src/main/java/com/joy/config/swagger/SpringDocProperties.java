@@ -13,8 +13,8 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties("springdoc.custom")
 public class SpringDocProperties {
 
-  private String title = "API";
-  private String version = "v0.0.1";
+  private String title = "Joy Admin API";
+  private String version = "v1.0.0";
   private List<ServerInfo> servers = List.of();
 
   /**

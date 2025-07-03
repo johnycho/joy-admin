@@ -14,7 +14,7 @@ public class HealthController {
 
   private final HealthMonitor healthMonitor;
 
-  @GetMapping(value = "/api/health")
+  @GetMapping(value = "/health")
   @Operation(summary = "서비스 상태 확인", description = "서비스 상태 확인", responses = @ApiResponse(responseCode = "200"))
   public ResponseEntity<String> checkHealth() {
     return ResponseEntity.ok(healthMonitor.health().getStatus().getCode());

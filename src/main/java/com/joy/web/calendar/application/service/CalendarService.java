@@ -19,7 +19,6 @@ import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -48,13 +47,11 @@ public class CalendarService {
                        .toList();
   }
 
-  @NotNull
   private static DateTime convertToDateTime(final String isoDateTime) {
     return new DateTime(Date.from(OffsetDateTime.parse(isoDateTime.replace(" ", "+"))
                                                 .toInstant()));
   }
 
-  @NotNull
   private CalendarTypeResponse mapToCalendarInfo(final OAuth2AuthenticationToken authentication, final String calendarId) {
     return new CalendarTypeResponse(calendarId, getCalendarName(authentication, calendarId));
   }
@@ -88,7 +85,6 @@ public class CalendarService {
     }
   }
 
-  @NotNull
   private EventPeriod getEventPeriod(final String start, final String end) {
     return new EventPeriod(convertToDateTime(start), convertToDateTime(end));
   }
@@ -115,7 +111,6 @@ public class CalendarService {
                    .orElseThrow(ExceptionInfo.INVALID_EVENT_DATETIME::exception);
   }
 
-  @NotNull
   private Calendar getCalendar(final OAuth2AuthenticationToken authentication) {
     try {
       return new Calendar.Builder(GoogleNetHttpTransport.newTrustedTransport(),
@@ -129,7 +124,6 @@ public class CalendarService {
     }
   }
 
-  @NotNull
   private AccessToken getAccessToken(final OAuth2AuthenticationToken authentication) {
     final OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(),
                                                                                                  authentication.getName());
