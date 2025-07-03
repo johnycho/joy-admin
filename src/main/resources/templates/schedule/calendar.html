@@ -64,7 +64,7 @@
     const calendarEl = document.getElementById('calendar');
 
     calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
+      initialView: window.innerWidth < 768 ? 'listMonth' : 'dayGridMonth',
       locale: 'ko',
       selectable: true,
       editable: true,
