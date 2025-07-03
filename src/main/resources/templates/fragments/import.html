@@ -15,14 +15,16 @@
     $('#studentDataTable').DataTable({
       language: {
         lengthMenu: "페이지당 _MENU_ 개의 목록 표시",
-        search: "제목 검색:",
-        zeroRecords: "검색된 항목이 없습니다.",
+        search: "검색:",
+        zeroRecords: "일치하는 항목이 없습니다.",
         info: "전체 _PAGES_ 페이지 중 _PAGE_ 페이지",
-        infoEmpty: "항목이 비었습니다.",
+        infoEmpty: "데이터 없음",
         infoFiltered: "(전체 _MAX_개의 항목에서 검색)",
         paginate: {
-          previous: "이전",
-          next: "다음"
+          first: '처음',
+          last: '마지막',
+          next: '다음',
+          previous: '이전'
         }
       },
       mark: true
@@ -90,6 +92,20 @@
     padding-right: 1em;
     padding-bottom: 1em;
     background-color: #f5f8fa;
+  }
+
+  @media (max-width: 768px) {
+    .dataTables_length label,
+    .dataTables_filter label,
+    .dataTables_info,
+    .dataTables_paginate {
+      font-size: 0.75rem; /* 작은 글씨 */
+    }
+
+    .dataTables_length select,
+    .dataTables_filter input {
+      font-size: 0.75rem;
+    }
   }
 </style>
 <link rel="stylesheet" th:href="@{/css/bootstrap-4-navbar.css}"/>
