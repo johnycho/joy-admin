@@ -14,8 +14,13 @@ public class BlogPostRepositoryImpl implements BlogPostRepository {
   private final BlogPostJpa jpa;
 
   @Override
-  public void save(final BlogPost student) {
-    jpa.save(student);
+  public BlogPost save(final BlogPost student) {
+    return jpa.save(student);
+  }
+
+  @Override
+  public BlogPost findByUuid(String uuid) {
+    return jpa.findByUuid(uuid);
   }
 
   @Override

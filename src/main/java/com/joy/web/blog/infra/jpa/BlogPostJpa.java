@@ -7,5 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BlogPostJpa extends JpaRepository<BlogPost, Long> {
 
+  BlogPost findByUuid(final String uuid);
+
   void deleteByUuid(final String uuid);
 }

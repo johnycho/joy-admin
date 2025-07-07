@@ -39,6 +39,7 @@
             <thead class="table-light">
             <tr>
               <th>No</th>
+              <th>UUID</th>
               <th>slug</th>
               <th>title</th>
               <th>authors</th>
@@ -52,6 +53,7 @@
             <tbody>
             <tr th:each="blogPost : ${blogPosts}">
               <td th:text="${blogPostStat.index + 1}"></td>
+              <td th:text="${blogPost.uuid()}"></td>
               <td th:text="${blogPost.slug()}"></td>
               <td th:text="${blogPost.title()}"></td>
               <td th:text="${blogPost.authors()}"></td>
@@ -73,7 +75,7 @@
   </div>
 </div>
 <th:block th:insert="~{fragments/deletionModal}"/>
-<form id="blogDeletionForm" th:action="@{/templates/blog}" th:method="post">
+<form id="blogPostDeletionForm" th:action="@{/blog/post}" th:method="post">
   <input name="_method" type="hidden" value="DELETE">
   <input id="type" name="type" type="hidden">
   <input id="uuid" name="uuid" type="hidden">

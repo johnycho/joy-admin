@@ -1,16 +1,18 @@
 package com.joy.web.blog.application.service;
 
+import com.joy.config.util.StringUtil;
 import com.joy.web.blog.application.dto.BlogDto.BlogPostMvcRequest;
 import com.joy.web.blog.application.dto.BlogDto.BlogPostMvcResponse;
+import com.joy.web.blog.domain.entity.BlogPost;
 import com.joy.web.blog.domain.repository.BlogPostRepository;
 import com.joy.web.blog.presentation.mapper.BlogPostEntityMapper;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jgit.api.Git;
@@ -25,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BlogService {
 
+  private static final String RELATIVE_PATH_FORMAT = "blog/{}.md";
   private static final String FRONT_MATTER_FORMAT = """
       ---
       slug: %s
@@ -48,13 +51,16 @@ public class BlogService {
 
   @Transactional
   public void register(final BlogPostMvcRequest request) {
-    repository.save(blogPostEntityMapper.toEntity(request));
-    deployBlogPost(resolveFileName(request), createMarkdown(request));
+    final BlogPost entity = repository.save(blogPostEntityMapper.toEntity(request));
+    deployBlogPost(resolveFileName(entity), createMarkdown(request));
   }
 
   @Transactional
   public void delete(final String uuid) {
+    final BlogPost entity = Optional.ofNullable(repository.findByUuid(uuid))
+                                    .orElseThrow(() -> new NoSuchElementException("No such blog post: " + uuid));
     repository.deleteByUuid(uuid);
+    deleteBlogPost(resolveFileName(entity));
   }
 
   @Transactional(readOnly = true)
@@ -66,11 +72,12 @@ public class BlogService {
   }
 
   public void deployBlogPost(final String fileName, final String markdownContent) {
-    final String filePath = gitRepoPath + "/blog/" + fileName + ".md";
+    final String relativePath = StringUtil.make(RELATIVE_PATH_FORMAT, fileName);
+    final File targetFile = new File(gitRepoPath, relativePath);
 
     try {
       // .md 파일 생성
-      Files.writeString(Paths.get(filePath), markdownContent);
+      Files.writeString(targetFile.toPath(), markdownContent);
 
       try (Git git = Git.open(new File(gitRepoPath))) {
         // fetch + pull (upstream 동기화)
@@ -82,7 +89,7 @@ public class BlogService {
            .call();
 
         // add + commit + push
-        git.add().addFilepattern("blog/" + fileName + ".md").call();
+        git.add().addFilepattern(relativePath).call();
         git.commit().setMessage("Add new blog post: " + fileName).call();
         git.push()
            .setCredentialsProvider(new UsernamePasswordCredentialsProvider(gitUsername, gitToken))
@@ -94,10 +101,44 @@ public class BlogService {
     }
   }
 
-  private static String resolveFileName(final BlogPostMvcRequest request) {
-    return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+  public void deleteBlogPost(final String fileName) {
+    final String relativePath = StringUtil.make(RELATIVE_PATH_FORMAT, fileName);
+    final File targetFile = new File(gitRepoPath, relativePath);
+
+    if (!targetFile.exists()) {
+      log.warn("Markdown file not found: {}", targetFile.getAbsolutePath());
+      return;
+    }
+
+    try {
+      Files.deleteIfExists(targetFile.toPath());
+
+      try (Git git = Git.open(new File(gitRepoPath))) {
+        // fetch + pull (upstream 동기화)
+        git.fetch()
+           .setCredentialsProvider(new UsernamePasswordCredentialsProvider(gitUsername, gitToken))
+           .call();
+        git.pull()
+           .setCredentialsProvider(new UsernamePasswordCredentialsProvider(gitUsername, gitToken))
+           .call();
+
+        // remove + commit + push
+        git.rm().addFilepattern(relativePath).call();
+        git.commit().setMessage("Delete blog post: " + fileName).call();
+        git.push()
+           .setCredentialsProvider(new UsernamePasswordCredentialsProvider(gitUsername, gitToken))
+           .call();
+      }
+
+    } catch (IOException | GitAPIException e) {
+      log.error("Failed to delete markdown file: {}", fileName, e);
+    }
+  }
+
+  private static String resolveFileName(final BlogPost entity) {
+    return entity.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
            + "-"
-           + request.slug();
+           + entity.getSlug();
   }
 
   private static String createMarkdown(final BlogPostMvcRequest request) {

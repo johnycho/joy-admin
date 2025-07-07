@@ -29,6 +29,7 @@
             <thead class="table-light">
             <tr>
               <th>No</th>
+              <th>UUID</th>
               <th>이름</th>
               <th>설명</th>
               <th>특이 사항</th>
@@ -39,6 +40,7 @@
             <tbody>
             <tr th:each="student : ${students}">
               <td th:text="${studentStat.index + 1}"></td>
+              <td th:text="${student.uuid()}"></td>
               <td th:text="${student.name()}"></td>
               <td th:text="${student.description()}"></td>
               <td style="white-space: pre-line;" th:text="${student.contents()}"></td>
@@ -57,7 +59,7 @@
   </div>
 </div>
 <th:block th:insert="~{fragments/deletionModal}"/>
-<form id="studentDeletionForm" th:action="@{/templates/student}" th:method="post">
+<form id="studentDeletionForm" th:action="@{/student}" th:method="post">
   <input name="_method" type="hidden" value="DELETE">
   <input id="type" name="type" type="hidden">
   <input id="uuid" name="uuid" type="hidden">
