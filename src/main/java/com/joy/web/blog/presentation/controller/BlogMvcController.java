@@ -1,8 +1,8 @@
-package com.joy.web.student.presentation.controller;
+package com.joy.web.blog.presentation.controller;
 
-import static com.joy.web.student.application.dto.StudentDto.EMPTY_STUDENT_REQUEST;
-import com.joy.web.student.application.dto.StudentDto.StudentMvcRequest;
-import com.joy.web.student.application.service.StudentService;
+import com.joy.web.blog.application.dto.BlogDto.BlogPostMvcRequest;
+import static com.joy.web.blog.application.dto.BlogDto.EMPTY_BLOG_POST_REQUEST;
+import com.joy.web.blog.application.service.BlogService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,31 +16,31 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-public class StudentMvcController {
+public class BlogMvcController {
 
-  private final StudentService studentService;
+  private final BlogService blogService;
 
-  @GetMapping("/student/register")
+  @GetMapping("/blog/register")
   public String displayRegisterPage(final Model model) {
-    model.addAttribute("student", EMPTY_STUDENT_REQUEST);
-    return "student/register";
+    model.addAttribute("blogPost", EMPTY_BLOG_POST_REQUEST);
+    return "blog/register";
   }
 
-  @GetMapping("/student/list")
+  @GetMapping("/blog/list")
   public String displayListPage(final Model model) {
-    model.addAttribute("students", studentService.findAll());
-    return "student/list";
+    model.addAttribute("blogPosts", blogService.findAll());
+    return "blog/list";
   }
 
-  @PostMapping("/student/register")
-  public String register(@Validated @ModelAttribute("student") final StudentMvcRequest request) {
-    studentService.register(request);
+  @PostMapping("/blog/register")
+  public String register(@Validated @ModelAttribute("blogPost") final BlogPostMvcRequest request) {
+    blogService.register(request);
     return "redirect:list";
   }
 
-  @DeleteMapping("/student")
+  @DeleteMapping("/blog/post")
   public String delete(final HttpServletRequest request, @RequestParam(name = "uuid") final String uuid) {
-    studentService.delete(uuid);
+    blogService.delete(uuid);
     return "redirect:" + request.getHeader("Referer");
   }
 }

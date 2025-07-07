@@ -27,10 +27,10 @@ CREATE TABLE student
     contents      TEXT COLLATE utf8mb4_bin         NULL,
     start_date    datetime                         NULL,
     end_date      datetime                         NULL,
-    created_date  datetime                         NOT NULL,
-    modified_date datetime                         NOT NULL,
-    CONSTRAINT pk_students PRIMARY KEY (id),
-    CONSTRAINT uk_students_uuid UNIQUE (uuid)
+    created_at    datetime                         NOT NULL,
+    modified_at   datetime                         NOT NULL,
+    CONSTRAINT pk_student PRIMARY KEY (id),
+    CONSTRAINT uk_student_uuid UNIQUE (uuid)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin;

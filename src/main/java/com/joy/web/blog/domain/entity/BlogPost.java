@@ -1,4 +1,4 @@
-package com.joy.web.student.domain.entity;
+package com.joy.web.blog.domain.entity;
 
 import com.joy.config.util.DataKeyGenerator;
 import jakarta.persistence.Column;
@@ -22,7 +22,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Student {
+public class BlogPost {
 
   @Column(nullable = false, unique = true)
   @Builder.Default
@@ -30,15 +30,15 @@ public class Student {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  private String name;
+  private String slug;
 
-  private String description;
+  private String title;
+
+  private String authors;
+
+  private String tags;
 
   private String contents;
-
-  private LocalDateTime startDate;
-
-  private LocalDateTime endDate;
 
   @Column(nullable = false)
   @CreatedDate

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+  <meta charset="UTF-8"/>
+  <title>블로그 리스트</title>
+  <th:block th:insert="~{fragments/import}"/>
+</head>
+<body>
+<th:block th:insert="~{fragments/heading}"/>
+<th:block th:insert="~{blog/dataTable}"/>
+</body>
+</html>

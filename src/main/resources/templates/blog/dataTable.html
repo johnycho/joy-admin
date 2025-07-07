@@ -1,0 +1,80 @@
+<head>
+  <meta charset="UTF-8">
+  <title>테이블</title>
+  <style>
+    @media (max-width: 768px) {
+      #blogDataTable {
+        font-size: 0.8rem;
+      }
+
+      #blogDataTable td,
+      #blogDataTable th {
+        white-space: nowrap;
+      }
+
+      .table-responsive {
+        overflow-x: auto;
+      }
+    }
+  </style>
+
+  <!-- CDN: Marked.js (마크다운 파서) -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll('[data-markdown]').forEach(el => {
+        el.innerHTML = marked.parse(el.textContent);
+      });
+    });
+  </script>
+</head>
+<div class="row gy-4 g-xl-8">
+  <div class="col-xxl-12">
+    <div class="card">
+      <div class="card-body d-flex flex-column">
+        <h3 class="card-title fw-bolder text-black">블로그 리스트</h3>
+        <br>
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped align-middle text-start" data-order='[[0, "desc"]]' id="blogDataTable">
+            <thead class="table-light">
+            <tr>
+              <th>No</th>
+              <th>slug</th>
+              <th>title</th>
+              <th>authors</th>
+              <th>tags</th>
+              <th>contents</th>
+              <th>등록 일시</th>
+              <th>수정 일시</th>
+              <th>삭제</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="blogPost : ${blogPosts}">
+              <td th:text="${blogPostStat.index + 1}"></td>
+              <td th:text="${blogPost.slug()}"></td>
+              <td th:text="${blogPost.title()}"></td>
+              <td th:text="${blogPost.authors()}"></td>
+              <td th:text="${blogPost.tags()}"></td>
+              <td data-markdown th:text="${blogPost.contents()}"></td>
+              <td th:text="${blogPost.createdAt()}"></td>
+              <td th:text="${blogPost.modifiedAt()}"></td>
+              <td>
+                <button class="btn p-0" th:blogPostUuid="${blogPost.uuid()}" th:onclick="|deleteData('blogPost', this.getAttribute('blogPostUuid'))|">
+                  <i class="fa fa-trash-o text-danger"></i>
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<th:block th:insert="~{fragments/deletionModal}"/>
+<form id="blogDeletionForm" th:action="@{/templates/blog}" th:method="post">
+  <input name="_method" type="hidden" value="DELETE">
+  <input id="type" name="type" type="hidden">
+  <input id="uuid" name="uuid" type="hidden">
+</form>

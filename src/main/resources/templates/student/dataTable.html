@@ -25,11 +25,10 @@
         <h3 class="card-title fw-bolder text-black">학생 리스트</h3>
         <br>
         <div class="table-responsive">
-          <table class="table table-bordered table-striped align-middle text-center" data-order='[[0, "desc"]]' id="studentDataTable">
+          <table class="table table-bordered table-striped align-middle text-start" data-order='[[0, "desc"]]' id="studentDataTable">
             <thead class="table-light">
             <tr>
               <th>No</th>
-              <th>UUID</th>
               <th>이름</th>
               <th>설명</th>
               <th>특이 사항</th>
@@ -40,7 +39,6 @@
             <tbody>
             <tr th:each="student : ${students}">
               <td th:text="${studentStat.index + 1}"></td>
-              <td th:text="${student.uuid()}"></td>
               <td th:text="${student.name()}"></td>
               <td th:text="${student.description()}"></td>
               <td style="white-space: pre-line;" th:text="${student.contents()}"></td>

@@ -12,33 +12,30 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * 민팅 이벤트 서비스.
- */
 @Service
 @RequiredArgsConstructor
 public class StudentService {
 
   private final StudentEntityMapper studentEntityMapper;
-  private final StudentRepository studentRepository;
+  private final StudentRepository repository;
 
   @Transactional
   public void register(final StudentMvcRequest request) {
     validateRequest(request);
-    studentRepository.save(studentEntityMapper.toEntity(request));
+    repository.save(studentEntityMapper.toEntity(request));
   }
 
   @Transactional
   public void delete(final String uuid) {
-    studentRepository.deleteByUuid(uuid);
+    repository.deleteByUuid(uuid);
   }
 
   @Transactional(readOnly = true)
   public List<StudentMvcResponse> findAll() {
-    return studentRepository.findAll()
-                            .stream()
-                            .map(StudentMvcResponse::of)
-                            .toList();
+    return repository.findAll()
+                     .stream()
+                     .map(StudentMvcResponse::of)
+                     .toList();
   }
 
   private void validateRequest(final StudentMvcRequest request) {
