@@ -72,8 +72,16 @@ public class BlogService {
       // .md 파일 생성
       Files.writeString(Paths.get(filePath), markdownContent);
 
-      // Git add, commit, push
       try (Git git = Git.open(new File(gitRepoPath))) {
+        // fetch + pull (upstream 동기화)
+        git.fetch()
+           .setCredentialsProvider(new UsernamePasswordCredentialsProvider(gitUsername, gitToken))
+           .call();
+        git.pull()
+           .setCredentialsProvider(new UsernamePasswordCredentialsProvider(gitUsername, gitToken))
+           .call();
+
+        // add + commit + push
         git.add().addFilepattern("blog/" + fileName + ".md").call();
         git.commit().setMessage("Add new blog post: " + fileName).call();
         git.push()
