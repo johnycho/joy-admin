@@ -31,7 +31,7 @@ public class BlogService {
   private static final String FRONT_MATTER_FORMAT = """
       ---
       slug: %s
-      title: %s
+      title: "%s"
       authors: [ %s ]
       tags: [ %s ]
       ---
