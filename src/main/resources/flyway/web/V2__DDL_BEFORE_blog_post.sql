@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS blog_post
     created_at    datetime                         NOT NULL,
     modified_at   datetime                         NOT NULL,
     CONSTRAINT pk_blog_post PRIMARY KEY (id),
-    CONSTRAINT uk_blog_post_uuid UNIQUE (uuid)
+    CONSTRAINT uk_blog_post_uuid UNIQUE (uuid),
     CONSTRAINT uk_blog_post_slug UNIQUE (slug)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
