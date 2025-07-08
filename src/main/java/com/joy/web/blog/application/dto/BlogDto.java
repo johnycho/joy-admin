@@ -1,5 +1,6 @@
 package com.joy.web.blog.application.dto;
 
+import com.joy.config.util.DataKeyGenerator;
 import com.joy.web.blog.domain.entity.BlogPost;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -19,6 +20,10 @@ public class BlogDto {
                                    String tags,
                                    @NotBlank(message = "contents을 입력하세요.")
                                    String contents) {
+
+    public BlogPostMvcRequest assignUuid() {
+      return new BlogPostMvcRequest(DataKeyGenerator.generateUniqueId(), slug, title, authors, tags, contents);
+    }
   }
 
   public record BlogPostMvcResponse(String uuid,

@@ -40,7 +40,7 @@ public class BlogMvcController {
 
   @PostMapping("/blog/register")
   public String register(@Validated @ModelAttribute("blogPost") final BlogPostMvcRequest request) {
-    blogService.register(request);
+    blogService.register(request.assignUuid());
     return "redirect:list";
   }
 

@@ -12,6 +12,7 @@
 </head>
 <body>
 <th:block th:insert="~{fragments/heading}"/>
+<th:block th:insert="~{fragments/loadingOverlay}"/>
 <div class="row gy-4 g-xl-8">
   <div class="col-xxl-12">
     <div class="card">
@@ -79,6 +80,9 @@
   editor.setMarkdown(initialContent);
 
   function registerData(formId) {
+    // 로딩 오버레이 표시
+    document.getElementById('loadingOverlay').style.display = 'block';
+
     const form = document.getElementById(formId);
     const hiddenInput = document.getElementById('contents');
     hiddenInput.value = editor.getMarkdown();
