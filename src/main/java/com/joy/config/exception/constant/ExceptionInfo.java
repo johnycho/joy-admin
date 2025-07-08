@@ -19,17 +19,21 @@ public enum ExceptionInfo implements ErrorInformation {
   FAILED_TO_FETCH_CALENDAR_INFO(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch calendar info: {}.", ErrorLevel.CRITICAL),
   FAILED_TO_FETCH_CALENDAR_EVENTS(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch calendar events: {}.", ErrorLevel.CRITICAL),
   UNEXPECTED_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected exception occurred.", ErrorLevel.CRITICAL),
+  NOT_FOUND_BLOG_POST(HttpStatus.NOT_FOUND, "Blog post not found.", ErrorLevel.NORMAL),
   ;
 
   private final HttpStatus status;
   private final String message;
   private final ErrorLevel level;
-
-  public CustomException exception() {
+  
+  public CustomException.CustomExceptionBuilder builder() {
     return CustomException.builder()
                           .service(Service.JOY)
                           .features(Set.of(Feature.JOY))
-                          .errorCode(this)
-                          .build();
+                          .errorCode(this);
+  }
+
+  public CustomException exception() {
+    return builder().build();
   }
 }

@@ -47,4 +47,12 @@ public class BlogPost {
   @Column(nullable = false)
   @LastModifiedDate
   private LocalDateTime modifiedAt;
+
+  public void update(BlogPost blogPost) {
+    this.slug = blogPost.getSlug();
+    this.title = blogPost.getTitle();
+    this.authors = blogPost.getAuthors();
+    this.tags = blogPost.getTags();
+    this.contents = blogPost.getContents();
+  }
 }

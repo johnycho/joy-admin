@@ -26,6 +26,12 @@ public class BlogMvcController {
     return "blog/register";
   }
 
+  @GetMapping("/blog/edit")
+  public String displayEditPage(@RequestParam("uuid") final String uuid, final Model model) {
+    model.addAttribute("blogPost", blogService.findBy(uuid));
+    return "blog/edit";
+  }
+
   @GetMapping("/blog/list")
   public String displayListPage(final Model model) {
     model.addAttribute("blogPosts", blogService.findAll());
@@ -35,6 +41,12 @@ public class BlogMvcController {
   @PostMapping("/blog/register")
   public String register(@Validated @ModelAttribute("blogPost") final BlogPostMvcRequest request) {
     blogService.register(request);
+    return "redirect:list";
+  }
+
+  @PostMapping("/blog/update")
+  public String update(@Validated @ModelAttribute("blogPost") final BlogPostMvcRequest request) {
+    blogService.update(request);
     return "redirect:list";
   }
 

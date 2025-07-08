@@ -6,9 +6,10 @@ import java.time.LocalDateTime;
 
 public class BlogDto {
 
-  public static final BlogPostMvcRequest EMPTY_BLOG_POST_REQUEST = new BlogPostMvcRequest(null, null, null, null, null);
+  public static final BlogPostMvcRequest EMPTY_BLOG_POST_REQUEST = new BlogPostMvcRequest(null, null, null, null, null, null);
 
-  public record BlogPostMvcRequest(@NotBlank(message = "slug를 입력하세요.")
+  public record BlogPostMvcRequest(String uuid,
+                                   @NotBlank(message = "slug를 입력하세요.")
                                    String slug,
                                    @NotBlank(message = "title을 입력하세요.")
                                    String title,

@@ -39,12 +39,11 @@
             <thead class="table-light">
             <tr>
               <th>No</th>
-              <th>UUID</th>
               <th>slug</th>
               <th>title</th>
               <th>authors</th>
               <th>tags</th>
-              <th>contents</th>
+              <!--              <th>contents</th>-->
               <th>등록 일시</th>
               <th>수정 일시</th>
               <th>삭제</th>
@@ -53,12 +52,19 @@
             <tbody>
             <tr th:each="blogPost : ${blogPosts}">
               <td th:text="${blogPostStat.index + 1}"></td>
-              <td th:text="${blogPost.uuid()}"></td>
-              <td th:text="${blogPost.slug()}"></td>
-              <td th:text="${blogPost.title()}"></td>
+              <td>
+                <a rel="noopener noreferrer"
+                   target="_blank"
+                   th:href="'https://joylangcenter.com/blog/' + ${blogPost.slug()}"
+                   th:text="${blogPost.slug()}">
+                </a>
+              </td>
+              <td>
+                <a th:href="@{/blog/edit(uuid=${blogPost.uuid()})}" th:text="${blogPost.title()}"></a>
+              </td>
               <td th:text="${blogPost.authors()}"></td>
               <td th:text="${blogPost.tags()}"></td>
-              <td data-markdown th:text="${blogPost.contents()}"></td>
+              <!--              <td data-markdown th:text="${blogPost.contents()}"></td>-->
               <td th:text="${blogPost.createdAt()}"></td>
               <td th:text="${blogPost.modifiedAt()}"></td>
               <td>
