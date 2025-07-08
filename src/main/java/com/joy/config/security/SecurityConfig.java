@@ -32,7 +32,7 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(final HttpSecurity http, final Customizer<CorsConfigurer<HttpSecurity>> corsCustomizer) throws Exception {
     return http.authorizeHttpRequests(configurer ->
-                                          configurer.requestMatchers("/", "/home", "/student/**")
+                                          configurer.requestMatchers("/", "/home", "/student/**", "/blog/**")
                                                     .hasAnyAuthority("ROLE_ADMIN", "OIDC_USER")
                                                     .requestMatchers("/api/**")
                                                     .authenticated()
