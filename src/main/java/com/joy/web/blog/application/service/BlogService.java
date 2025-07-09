@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BlogService {
 
-  private static final String RELATIVE_PATH_FORMAT = "blog/{}.md";
+  private static final String RELATIVE_PATH_FORMAT = "blog/{}.mdx";
   private static final String FRONT_MATTER_FORMAT = """
       ---
       slug: %s
