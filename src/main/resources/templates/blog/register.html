@@ -9,9 +9,19 @@
 
   <!-- Toast UI Editor CSS -->
   <link href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" rel="stylesheet"/>
-
   <!-- Toast UI Editor JS -->
   <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
+  <style>
+    #toastEditorWrapper {
+      resize: vertical;
+      overflow: auto;
+      height: 500px;
+      min-height: 500px;
+      max-height: 2000px;
+      border: 1px solid #ccc;
+    }
+  </style>
 </head>
 <body>
 <th:block th:insert="~{fragments/heading}"/>
@@ -51,7 +61,9 @@
           <div class="form-group">
             <label class="control-label col-sm-10" for="contents">contents:</label>
             <div class="col-sm-10">
-              <div id="toastEditor" style="border:1px solid #ccc;"></div>
+              <div id="toastEditorWrapper">
+                <div id="toastEditor"></div>
+              </div>
               <input id="contents" name="contents" required type="hidden"/>
             </div>
           </div>
@@ -71,9 +83,10 @@
 <script>
   const editor = new toastui.Editor({
     el: document.querySelector('#toastEditor'),
-    height: '1000px',
-    initialEditType: 'markdown',
-    previewStyle: 'vertical',
+    height: '100%',
+    initialEditType: 'wysiwyg', // markdown
+    hideModeSwitch: true, // 모드 전환 탭 숨김
+    previewStyle: 'vertical', // tab
     language: 'ko',
   });
 
@@ -83,7 +96,9 @@
 
     const form = document.getElementById(formId);
     const hiddenInput = document.getElementById('contents');
-    hiddenInput.value = editor.getMarkdown();
+
+    // <br> 태그를 Markdown 줄 바꿈으로 변환
+    hiddenInput.value = editor.getHTML().replace(/<br\s*\/?>/gi, '  \n');
     form.submit();
   }
 </script>
