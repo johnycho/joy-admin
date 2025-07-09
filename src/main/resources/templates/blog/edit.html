@@ -91,7 +91,7 @@
   });
 
   const initialContent = /*<![CDATA[*/ [[${blogPost.contents}]] /*]]>*/;
-  editor.setMarkdown(initialContent);
+  editor.setHTML(initialContent);
 
   // 일정 시간 뒤에 커서 이동 및 스크롤
   setTimeout(() => {
