@@ -84,42 +84,22 @@
   const editor = new toastui.Editor({
     el: document.querySelector('#toastEditor'),
     height: '100%',
-    initialEditType: 'wysiwyg', // markdown
+    initialEditType: 'markdown', // wysiwyg
     hideModeSwitch: true, // 모드 전환 탭 숨김
     previewStyle: 'vertical', // tab
     language: 'ko',
   });
 
   const initialContent = /*<![CDATA[*/ [[${blogPost.contents}]] /*]]>*/;
-  editor.setHTML(initialContent);
+  editor.setMarkdown(initialContent);
 
-  // 일정 시간 뒤에 커서 이동 및 스크롤
+  // 미리보기 영역의 스크롤을 맨 위로 이동
   setTimeout(() => {
-    const wwEditor = document.querySelector('.toastui-editor-ww-container .ProseMirror');
-    if (wwEditor) {
-      const range = document.createRange();
-      const selection = window.getSelection();
-
-      // 첫 텍스트 노드 찾기
-      let firstTextNode = wwEditor.firstChild;
-      if (firstTextNode && firstTextNode.nodeType === 1) {
-        // 자식 노드 중 텍스트 노드 찾기
-        firstTextNode = firstTextNode.firstChild;
-      }
-
-      if (firstTextNode) {
-        range.setStart(firstTextNode, 0);
-        range.collapse(true);
-        selection.removeAllRanges();
-        selection.addRange(range);
-      }
-
-      wwEditor.scrollTop = 0;
+    const previewEl = document.querySelector('.toastui-editor-md-preview');
+    if (previewEl) {
+      previewEl.scrollTop = 0;
     }
-
-    // 에디터 자체 포커스
-    editor.focus();
-  }, 300); // 필요시 300~500ms로 늘려도 OK
+  }, 300); // 에디터 렌더 완료 시점에 맞게 시간 조절
 
   function registerData(formId) {
     // 로딩 오버레이 표시
@@ -127,32 +107,8 @@
 
     const form = document.getElementById(formId);
     const hiddenInput = document.getElementById('contents');
-    hiddenInput.value = sanitizeHtmlForMdx(editor.getHTML());
+    hiddenInput.value = editor.getMarkdown();
     form.submit();
-  }
-
-  function sanitizeHtmlForMdx(html) {
-    return html
-    // Self-close void elements
-    .replace(/<img([^>]*)>/gi, '<img$1 />')
-    .replace(/<br([^>]*)>/gi, '<br$1 />')
-    .replace(/<hr([^>]*)>/gi, '<hr$1 />')
-    .replace(/<input([^>]*)>/gi, '<input$1 />')
-
-    // Remove all <div> tags but preserve inner content
-    .replace(/<div[^>]*>(.*?)<\/div>/gis, '$1')
-
-    // <p><br ...></p> → <br />
-    .replace(/<p>\s*<br[^>]*>\s*<\/p>/gi, '<br />')
-
-    // Remove empty <p></p>
-    .replace(/<p>\s*<\/p>/gi, '')
-
-    // Convert <p>...</p> into "content<br />"
-    .replace(/<p>(.*?)<\/p>/gis, (_, content) => `${content.trim()}<br />`)
-
-    // Prevent block elements inside <p>
-    .replace(/<p>(\s*<(div|section|article|ul|ol|h[1-6])[^>]*>.*?<\/\2>)\s*<\/p>/gis, '$1');
   }
 </script>
 </body>

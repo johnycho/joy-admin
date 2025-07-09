@@ -48,7 +48,7 @@ public class BlogPost {
   @LastModifiedDate
   private LocalDateTime modifiedAt;
 
-  public void update(BlogPost blogPost) {
+  public void update(final BlogPost blogPost) {
     this.slug = blogPost.getSlug();
     this.title = blogPost.getTitle();
     this.authors = blogPost.getAuthors();

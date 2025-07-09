@@ -84,7 +84,7 @@
   const editor = new toastui.Editor({
     el: document.querySelector('#toastEditor'),
     height: '100%',
-    initialEditType: 'wysiwyg', // markdown
+    initialEditType: 'markdown', // wysiwyg
     hideModeSwitch: true, // 모드 전환 탭 숨김
     previewStyle: 'vertical', // tab
     language: 'ko',
@@ -96,32 +96,8 @@
 
     const form = document.getElementById(formId);
     const hiddenInput = document.getElementById('contents');
-    hiddenInput.value = sanitizeHtmlForMdx(editor.getHTML());
+    hiddenInput.value = editor.getMarkdown();
     form.submit();
-  }
-
-  function sanitizeHtmlForMdx(html) {
-    return html
-    // Self-close void elements
-    .replace(/<img([^>]*)>/gi, '<img$1 />')
-    .replace(/<br([^>]*)>/gi, '<br$1 />')
-    .replace(/<hr([^>]*)>/gi, '<hr$1 />')
-    .replace(/<input([^>]*)>/gi, '<input$1 />')
-
-    // Remove all <div> tags but preserve inner content
-    .replace(/<div[^>]*>(.*?)<\/div>/gis, '$1')
-
-    // <p><br ...></p> → <br />
-    .replace(/<p>\s*<br[^>]*>\s*<\/p>/gi, '<br />')
-
-    // Remove empty <p></p>
-    .replace(/<p>\s*<\/p>/gi, '')
-
-    // Convert <p>...</p> into "content<br />"
-    .replace(/<p>(.*?)<\/p>/gis, (_, content) => `${content.trim()}<br />`)
-
-    // Prevent block elements inside <p>
-    .replace(/<p>(\s*<(div|section|article|ul|ol|h[1-6])[^>]*>.*?<\/\2>)\s*<\/p>/gis, '$1');
   }
 </script>
 </body>
