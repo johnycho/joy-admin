@@ -108,6 +108,9 @@
     .replace(/<hr([^>]*)>/gi, '<hr$1 />')
     .replace(/<input([^>]*)>/gi, '<input$1 />')
 
+    // <p><br ...></p> → <br />
+    .replace(/<p>\s*<br[^>]*>\s*<\/p>/gi, '<br />')
+
     // Remove empty <p></p>
     .replace(/<p>\s*<\/p>/gi, '')
 
