@@ -96,10 +96,23 @@
 
     const form = document.getElementById(formId);
     const hiddenInput = document.getElementById('contents');
-
-    // <br> 태그를 Markdown 줄 바꿈으로 변환
-    hiddenInput.value = editor.getHTML().replace(/<br\s*\/?>/gi, '  \n');
+    hiddenInput.value = sanitizeHtmlForMdx(editor.getHTML());
     form.submit();
+  }
+
+  function sanitizeHtmlForMdx(html) {
+    return html
+    // Self-close void elements
+    .replace(/<img([^>]*)>/gi, '<img$1 />')
+    .replace(/<br([^>]*)>/gi, '<br$1 />')
+    .replace(/<hr([^>]*)>/gi, '<hr$1 />')
+    .replace(/<input([^>]*)>/gi, '<input$1 />')
+
+    // Remove empty <p></p>
+    .replace(/<p>\s*<\/p>/gi, '')
+
+    // Prevent block elements inside <p>
+    .replace(/<p>(\s*<(div|section|article|ul|ol|h[1-6])[^>]*>.*?<\/\2>)\s*<\/p>/gis, '$1');
   }
 </script>
 </body>
