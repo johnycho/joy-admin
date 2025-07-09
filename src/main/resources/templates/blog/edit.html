@@ -142,8 +142,8 @@
     // Remove empty <p></p>
     .replace(/<p>\s*<\/p>/gi, '')
 
-    // Convert <p>...</p> into "content  \n"
-    .replace(/<p>(.*?)<\/p>/gis, (_, content) => `${content.trim()}  \n`)
+    // Convert <p>...</p> into "content<br />"
+    .replace(/<p>(.*?)<\/p>/gis, (_, content) => `${content.trim()}<br />`)
 
     // Prevent block elements inside <p>
     .replace(/<p>(\s*<(div|section|article|ul|ol|h[1-6])[^>]*>.*?<\/\2>)\s*<\/p>/gis, '$1');
