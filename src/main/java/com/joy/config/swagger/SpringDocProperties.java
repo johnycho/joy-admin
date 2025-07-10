@@ -2,24 +2,18 @@ package com.joy.config.swagger;
 
 import java.util.List;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
-/**
- * SwaggerProperties.
- */
 @Data
-@Configuration
+@RequiredArgsConstructor
 @ConfigurationProperties("springdoc.custom")
 public class SpringDocProperties {
 
-  private String title = "Joy Admin API";
-  private String version = "v1.0.0";
-  private List<ServerInfo> servers = List.of();
+  private final String title;
+  private final String version;
+  private final List<ServerInfo> servers;
 
-  /**
-   * ServerInfo.
-   */
   @Data
   public static class ServerInfo {
 
