@@ -35,6 +35,14 @@ public class BlogService {
       title: "%s"
       authors: [ %s ]
       tags: [ %s ]
+      description: %s
+      keywords:
+        - 원주 언어발달센터
+        - 원주 기업도시 언어발달센터
+        - 원주 지정면 언어발달센터
+        - 원주 언어치료
+        - 원주 기업도시 언어치료
+        - 원주 지정면 언어치료
       ---
       
       """;
@@ -103,7 +111,8 @@ public class BlogService {
     return FRONT_MATTER_FORMAT.formatted(request.slug(),
                                          request.title(),
                                          request.authors(),
-                                         request.tags())
+                                         request.tags(),
+                                         request.title())
            + request.contents();
   }
 
