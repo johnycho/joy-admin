@@ -35,7 +35,7 @@ public class BlogService {
       title: "%s"
       authors: [ %s ]
       tags: [ %s ]
-      description: %s
+      description: "%s"
       keywords:
         - 원주 언어발달센터
         - 원주 기업도시 언어발달센터
