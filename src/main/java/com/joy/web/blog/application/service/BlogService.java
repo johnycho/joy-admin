@@ -47,6 +47,9 @@ public class BlogService {
       
       """;
   private static final String CONTENTS_PREFIX = """
+      import React from 'react';
+      import NaverMap from '@site/src/components/NaverMap';
+      
       <!-- truncate -->
       <br /><br />
       
@@ -71,9 +74,8 @@ public class BlogService {
       ⭐️ 인스타그램: [@joylangcenter](https://instagram.com/joylangcenter) \s
       🏠 홈페이지: [joylangcenter.com](https://joylangcenter.com)
       
-      import React from 'react';
-      import NaverMap from '@site/src/components/NaverMap';
       <NaverMap />
+      
       ![](../static/img/joy-content-logo.jpg)
       """;
 
