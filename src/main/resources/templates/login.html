@@ -8,20 +8,20 @@
 <body>
 <div class="container">
   <div class="row justify-content-center align-items-center" style="height:100vh">
-    <div class="row gy-8 g-xl-8 justify-content-center">
-      <div class="col-xl-4">
+    <div class="row gy-8 g-sm-4 g-md-4 g-lg-6 g-xl-4 justify-content-center">
+      <div class="col-sm-8 col-md-6 col-lg-6 col-xl-5">
         <div class="card">
           <div class="card-body d-flex flex-column">
-            <img src="/img/joy-logo-orange.png" alt="Joy Admin 로고" class="mx-auto d-block" style="width: 20em;" />
+            <img alt="Joy Admin 로고" class="mx-auto d-block" src="/img/joy-logo-orange.png" style="max-width: 100%; height: auto;"/>
             <br>
-            <form method="post" action="/login/process" autocomplete="off">
+            <form action="/login/process" autocomplete="off" method="post">
               <div class="form-group">
                 <label for="userId" style="display: none"></label>
-                <input type="text" class="form-control" id="userId" name="userId" placeholder="아이디"/>
+                <input class="form-control" id="userId" name="userId" placeholder="아이디" type="text"/>
               </div>
               <div class="form-group">
                 <label for="userPassword" style="display: none"></label>
-                <input type="password" class="form-control" id="userPassword" name="userPassword" placeholder="비밀번호"/>
+                <input class="form-control" id="userPassword" name="userPassword" placeholder="비밀번호" type="password"/>
               </div>
               <span th:if="${param.error != null}">
               <div style="color: red; ">
@@ -31,15 +31,15 @@
               </div>
               <br>
             </span>
-              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-              <button type="submit" class="btn btn-primary">로그인</button>
+              <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
+              <button class="btn btn-primary" type="submit">로그인</button>
             </form>
 
             <hr class="my-4">
 
             <!-- 구글 로그인 버튼 -->
-            <a href="/oauth2/authorization/google" class="btn btn-outline-dark w-100">
-              <img src="https://developers.google.com/identity/images/g-logo.png" style="width:20px; margin-right:10px;" alt="구글 로그인">
+            <a class="btn btn-outline-dark w-100" href="/oauth2/authorization/google">
+              <img alt="구글 로그인" src="https://developers.google.com/identity/images/g-logo.png" style="width:20px; margin-right:10px;">
               구글 계정으로 로그인
             </a>
           </div>
