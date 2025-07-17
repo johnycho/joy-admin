@@ -64,7 +64,7 @@ public class BlogService {
       💬 카카오채널: [joylangcenter](https://pf.kakao.com/_sxjPXn) \s
       ⭐️ 인스타그램: [@joylangcenter](https://instagram.com/joylangcenter) \s
       🏠 홈페이지: [joylangcenter.com](https://joylangcenter.com)
-      ![](/img/joy-content-logo.jpg)
+      ![](../static/img/joy-content-logo.jpg)
       """;
 
   private final BlogPostEntityMapper blogPostEntityMapper;
