@@ -46,6 +46,11 @@ public class BlogService {
       ---
       
       """;
+  private static final String CONTENTS_PREFIX = """
+      <!-- truncate -->
+      
+      
+      """;
   private final BlogPostEntityMapper blogPostEntityMapper;
   private final BlogPostRepository repository;
 
@@ -113,6 +118,7 @@ public class BlogService {
                                          request.authors(),
                                          request.tags(),
                                          request.title())
+           + CONTENTS_PREFIX
            + request.contents();
   }
 
