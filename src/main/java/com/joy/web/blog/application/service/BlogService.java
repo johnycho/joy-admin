@@ -51,6 +51,22 @@ public class BlogService {
       <br /><br />
       
       """;
+  private static final String CONTENTS_POSTFIX = """
+      
+      ---
+      
+      Let's enJOY in JOY ! 🎉✨
+      
+      ---
+      
+      📍 위치: 원주시 지정면 무릉로 15, JD 스퀘어 6층 (기업도시 토이 아울렛 건물) \s
+      📞 문의: 033-745-1030 \s
+      💬 카카오채널: [joylangcenter](https://pf.kakao.com/_sxjPXn) \s
+      ⭐️ 인스타그램: [@joylangcenter](https://instagram.com/joylangcenter) \s
+      🏠 홈페이지: [joylangcenter.com](https://joylangcenter.com)
+      ![](/img/joy-content-logo.jpg)
+      """;
+
   private final BlogPostEntityMapper blogPostEntityMapper;
   private final BlogPostRepository repository;
 
