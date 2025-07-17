@@ -135,7 +135,8 @@ public class BlogService {
                                          request.tags(),
                                          request.title())
            + CONTENTS_PREFIX
-           + request.contents();
+           + request.contents()
+           + CONTENTS_POSTFIX;
   }
 
   private void deployNewBlogPost(final String fileName, final String markdownContent) {
