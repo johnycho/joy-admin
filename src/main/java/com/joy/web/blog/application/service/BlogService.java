@@ -60,8 +60,6 @@ public class BlogService {
       아이들의 언어발달에 즐거움을 더하는 공간 \s
       **조이 언어발달센터**입니다.
       
-      <br /><br />
-      
       ---
       
       Let's enJOY in JOY ! 🎉✨
