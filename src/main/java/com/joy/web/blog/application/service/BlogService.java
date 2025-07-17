@@ -47,7 +47,6 @@ public class BlogService {
       
       """;
   private static final String CONTENTS_PREFIX = """
-      import React from 'react';
       import NaverMap from '@site/src/components/NaverMap';
       
       <!-- truncate -->
