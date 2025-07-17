@@ -48,7 +48,7 @@ public class BlogService {
       """;
   private static final String CONTENTS_PREFIX = """
       <!-- truncate -->
-      
+      <br /><br />
       
       """;
   private final BlogPostEntityMapper blogPostEntityMapper;
