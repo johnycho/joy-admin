@@ -52,7 +52,7 @@ public class BlogService {
       
       """;
   private static final String CONTENTS_POSTFIX = """
-      
+      <br /><br />
       ---
       
       Let's enJOY in JOY ! 🎉✨
