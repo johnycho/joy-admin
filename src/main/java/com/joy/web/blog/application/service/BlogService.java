@@ -75,7 +75,7 @@ public class BlogService {
       
       <NaverMap />
       
-      ![](../static/img/joy-content-logo.jpg)
+      ![조이 언어발달센터, 원주 언어치료센터, 원주 언어재활센터, 원주 언어발달센터](../static/img/joy-content-logo.jpg)
       """;
 
   private final BlogPostEntityMapper blogPostEntityMapper;
