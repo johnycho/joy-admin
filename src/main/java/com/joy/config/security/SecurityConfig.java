@@ -70,7 +70,7 @@ public class SecurityConfig {
   Customizer<CorsConfigurer<HttpSecurity>> corsCustomizer() {
     return cors -> {
       final CorsConfiguration configuration = new CorsConfiguration();
-      configuration.setAllowedOrigins(joyProperties.getCors().getOrigins());
+      configuration.setAllowedOriginPatterns(joyProperties.getCors().getOrigins());
       configuration.setAllowedHeaders(List.of("*"));
       configuration.setAllowedMethods(List.of("*"));
 
